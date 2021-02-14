@@ -51,7 +51,7 @@ commands:
           command: |
             aws --endpoint ${AWS_ENDPOINT} cloudwatch put-dashboard \
               --dashboard-name 'My Dashboard' \
-              --dashboard-body '{"widgets":[{"type":"metric","x":0,"y":90,"width":24,"height":6,"properties":{"view":"timeSeries","stacked":false,"metrics":[["AWS/ApplicationELB","RequestCount","LoadBalancer","app/sample1/1234567890"]],"region":"ap-northeast-1","title":"My Metrics1"}},{"type":"metric","x":0,"y":90,"width":24,"height":6,"properties":{"view":"timeSeries","stacked":false,"metrics":[["AWS/ApplicationELB","RequestCount","LoadBalancer","app/sample2/1234567890"]],"region":"ap-northeast-1","title":"My Metrics2"}}]}'
+              --dashboard-body '{"widgets":[{"type":"metric","x":0,"y":90,"width":24,"height":6,"properties":{"view":"timeSeries","stacked":false,"metrics":[["AWS/ApplicationELB","RequestCount","LoadBalancer","app/sample1/1234567890"]],"region":"ap-northeast-1","title":"My Metrics1"}},{"type":"metric","x":0,"y":90,"width":24,"height":6,"properties":{"view":"timeSeries","stacked":false,"metrics":[["AWS/ApplicationELB","RequestCount","LoadBalancer","app/sample2/1234567890"]],"region":"ap-northeast-1","title":"My Metrics2","annotations":{"vertical":[{"label":"Deploy Finished.","value":"2021-02-14T09:25:16+0000"}]}}}]}'
 
   check-annotation-on-dashboard:
     steps:
@@ -66,8 +66,7 @@ commands:
                       --dashboard-name 'My Dashboard' \
                       | jq -r .DashboardBody \
                       | jq '.widgets[]|select(.properties.title == "My Metrics2")'
-            echo $COUNT
-            if [ -z $COUNT -o $COUNT = "0" ];then
+            if [ -z $COUNT -o $COUNT = "1" ];then
               exit 1
             fi
 
