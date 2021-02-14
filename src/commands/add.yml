@@ -57,7 +57,7 @@ steps:
         echo "---------------------------------------------"
         ${AWS_COMMAND} cloudwatch put-dashboard \
           --dashboard-name "'${DASHBOARD_TITLE}'" \
-          --dashboard-body "'${UPDATE_DASHBOARD_BODY}'"
+          --dashboard-body ${UPDATE_DASHBOARD_BODY}
         # For debug
         echo "---------------------------------------------"
         ${AWS_COMMAND} cloudwatch get-dashboard --dashboard-name "${DASHBOARD_TITLE}"
