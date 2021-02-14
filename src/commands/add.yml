@@ -52,5 +52,5 @@ steps:
           diff -u <(echo ${DASHBOARD_BODY} | jq .) <(echo ${UPDATE_DASHBOARD_BODY} | jq .)
         fi
         ${AWS_COMMAND} cloudwatch put-dashboard \
-          --dashboard-name "${DASHBOARD_TITLE}" \
+          --dashboard-name "'${DASHBOARD_TITLE}'" \
           --dashboard-body "$(echo ${UPDATE_DASHBOARD_BODY})"
