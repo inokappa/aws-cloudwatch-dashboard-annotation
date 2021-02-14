@@ -62,6 +62,10 @@ commands:
                       --dashboard-name 'My Dashboard' \
                       | jq -r .DashboardBody \
                       | jq '.widgets[]|select(.properties.title == "My Metrics2").properties.annotations.vertical|length')
+            aws --endpoint ${AWS_ENDPOINT} cloudwatch get-dashboard \
+                      --dashboard-name 'My Dashboard' \
+                      | jq -r .DashboardBody \
+                      | jq '.widgets[]|select(.properties.title == "My Metrics2")'
             echo $COUNT
             if [ -z $COUNT -o $COUNT = "0" ];then
               exit 1
