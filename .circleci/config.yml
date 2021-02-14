@@ -50,7 +50,7 @@ commands:
           name: Add Dashboard for intergration test.
           command: |
             aws --endpoint ${AWS_ENDPOINT} cloudwatch put-dashboard \
-              --dashboard-name "My Dashboard" \
+              --dashboard-name 'My Dashboard' \
               --dashboard-body '{"widgets":[{"type":"metric","x":0,"y":90,"width":24,"height":6,"properties":{"view":"timeSeries","stacked":false,"metrics":[["AWS/ApplicationELB","RequestCount","LoadBalancer","app/sample1/1234567890"]],"region":"ap-northeast-1","title":"My Metrics1"}},{"type":"metric","x":0,"y":90,"width":24,"height":6,"properties":{"view":"timeSeries","stacked":false,"metrics":[["AWS/ApplicationELB","RequestCount","LoadBalancer","app/sample2/1234567890"]],"region":"ap-northeast-1","title":"My Metrics2"}}]}'
 
   check-annotation-on-dashboard:
