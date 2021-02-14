@@ -67,8 +67,7 @@ commands:
 
 jobs:
   integration-test-1:
-    docker:
-      - image: cimg/base:stable
+    executor: integration-test
     steps:
       - checkout
       - install-awscli
