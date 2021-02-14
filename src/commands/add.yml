@@ -49,7 +49,7 @@ steps:
           | jq "(.widgets[]|select(.properties.title == \"${WIDGET_TITLE}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
         DISPLAY_DIFF=<< parameters.display_diff >>
         if [ "${DISPLAY_DIFF}" != "no" ];then
-          diff -u <(echo ${DASHBOARD_BODY} | jq .) <(echo ${UPDATE_DASHBOARD_BODY} | jq .)
+          diff -u <(echo ${DASHBOARD_BODY} | jq .) <(echo ${UPDATE_DASHBOARD_BODY} | jq .) || true
         fi
         ${AWS_COMMAND} cloudwatch put-dashboard \
           --dashboard-name "'${DASHBOARD_TITLE}'" \
