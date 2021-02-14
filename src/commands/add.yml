@@ -29,9 +29,9 @@ steps:
         DASHBOARD_TITLE='<< parameters.dashboard_title >>'
         WIDGET_TITLE='<< parameters.widget_title >>'
         LABEL='<< parameters.label >>'
-        AWS_COMMAND="aws"
+        AWS_COMMAND="$(which aws)"
         if [ -n "${AWS_ENDPOINT}" ];then
-          AWS_COMMAND="aws --endpoint ${AWS_ENDPOINT}"
+          AWS_COMMAND="$(which aws) --endpoint ${AWS_ENDPOINT}"
         fi
         DASHBOARD_EXISTS=$(${AWS_COMMAND} cloudwatch list-dashboards \
           | jq ".DashboardEntries[]|select(.DashboardName == \"${DASHBOARD_TITLE}\")")
