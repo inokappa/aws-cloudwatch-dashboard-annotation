@@ -71,7 +71,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - install-awscli 
+      - install-awscli
       - add-dashboard
       - run:
           name: Your Deploy Action
