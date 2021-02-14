@@ -1,13 +1,20 @@
 description: >
-  Sample example description.
-# Provide a use-case based example for using this orb.
-# Everything in the `usage` section will be displayed in the orb registry.
-# Comments are not retained.
+  The usage of aws-cloudwatch-dashboard-annotation is as follows.
 usage:
   version: 2.1
   orbs:
-    <orb-name>: <namespace>/<orb-name>@1.2.3
+    aws-cloudwatch-dashboard-annotation: inokappa/aws-cloudwatch-dashboard-annotation@0.0.1
   workflows:
-    use-my-orb:
+    use-my-orb1:
       jobs:
-        - <orb-name>/<job-name>
+        - checkout
+        - run:
+            name: Your Deploy Action
+            command: |
+              echo "Your Deploy Action"
+              echo "export DEPLOY_FINISHED_DATETIME=$(date -u '+%Y-%m-%dT%H:%M:%S%z')" >> $BASH_ENV
+        - aws-cloudwatch-dashboard-annotation/add:
+            dashboard_title: "My Dashboard"
+            widget_title: "My Widget"
+            display_diff: "yes"
+            deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
