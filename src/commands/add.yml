@@ -56,9 +56,9 @@ steps:
         echo ${UPDATE_DASHBOARD_BODY} | jq .
         echo "---------------------------------------------"
         ${AWS_COMMAND} cloudwatch put-dashboard \
-          --dashboard-name "'${DASHBOARD_TITLE}'" \
+          --dashboard-name '"${DASHBOARD_TITLE}"' \
           --dashboard-body "$(echo ${UPDATE_DASHBOARD_BODY})"
         # For debug
         echo "---------------------------------------------"
-        ${AWS_COMMAND} cloudwatch get-dashboard --dashboard-name "${DASHBOARD_TITLE}"
+        ${AWS_COMMAND} cloudwatch get-dashboard --dashboard-name "${DASHBOARD_TITLE}" | jq -r .DashboardBody
         echo "---------------------------------------------"
