@@ -92,6 +92,23 @@ jobs:
           deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
       - check-annotation-on-dashboard
 
+  integration-test-2:
+    executor: integration-test
+    environment:
+      AWS_PAGER: ''
+    steps:
+      - checkout
+      - install-awscli
+      - add-dashboard
+      - run:
+          name: Your Deploy Action
+          command: |
+            echo "Your Deploy Action"
+      - aws-cloudwatch-dashboard-annotation/add:
+          dashboard_title: "My Dashboard"
+          widget_title: "My Metrics2"
+      - check-annotation-on-dashboard
+
 workflows:
   test-pack:
     unless: << pipeline.parameters.run-integration-tests >>
