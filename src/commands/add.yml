@@ -46,7 +46,7 @@ steps:
         DASHBOARD_BODY=$(${AWS_COMMAND} cloudwatch get-dashboard \
           --dashboard-name "${DASHBOARD_TITLE}" | jq -r .DashboardBody)
         UPDATE_DASHBOARD_BODY=$(echo "${DASHBOARD_BODY}" \
-          | jq "(.widgets[]|select(.properties.title == \"${WIDGET_TITLE}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
+          | jq -c "(.widgets[]|select(.properties.title == \"${WIDGET_TITLE}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
         DISPLAY_DIFF=<< parameters.display_diff >>
         if [ "${DISPLAY_DIFF}" != "no" ];then
           diff -u <(echo ${DASHBOARD_BODY} | jq .) <(echo ${UPDATE_DASHBOARD_BODY} | jq .) || true
@@ -57,7 +57,7 @@ steps:
         echo "---------------------------------------------"
         ${AWS_COMMAND} cloudwatch put-dashboard \
           --dashboard-name "'${DASHBOARD_TITLE}'" \
-          --dashboard-body ${UPDATE_DASHBOARD_BODY}
+          --dashboard-body "'${UPDATE_DASHBOARD_BODY}'"
         # For debug
         echo "---------------------------------------------"
         ${AWS_COMMAND} cloudwatch get-dashboard --dashboard-name "${DASHBOARD_TITLE}"
