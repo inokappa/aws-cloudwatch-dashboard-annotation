@@ -29,35 +29,28 @@ steps:
         DASHBOARD_TITLE=<< parameters.dashboard_title >>
         WIDGET_TITLE=<< parameters.widget_title >>
         LABEL=<< parameters.label >>
-        
         AWS_COMMAND="aws"
         if [ -n "${AWS_ENDPOINT}" ];then
           AWS_COMMAND="aws --endpoint ${AWS_ENDPOINT}"
         fi
-        
         DASHBOARD_EXISTS=$(${AWS_COMMAND} cloudwatch list-dashboards \
           | jq ".DashboardEntries[]|select(.DashboardName == \"${DASHBOARD_TITLE}\")")
         if [ -z "${DASHBOARD_EXISTS}" ];then
           echo "Dashboard: ${DASHBOARD_TITLE} does not exists."
           exit 0
         fi
-        
         DEPLOY_FINISHED_DATETIME="<< parameters.deploy_finished_datetime >>"
         if [ -z "${DEPLOY_FINISHED_DATETIME}" ];then
           DEPLOY_FINISHED_DATETIME=$(date -u '+%Y-%m-%dT%H:%M:%S%z')
         fi
-        
         DASHBOARD_BODY=$(${AWS_COMMAND} cloudwatch get-dashboard \
           --dashboard-name "${DASHBOARD_TITLE}" | jq -r .DashboardBody)
         UPDATE_DASHBOARD_BODY=$(echo "${DASHBOARD_BODY}" \
           | jq "(.widgets[]|select(.properties.title == \"${WIDGET_TITLE}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
-        
-
         DISPLAY_DIFF=<< parameters.display_diff >>
         if [ "${DISPLAY_DIFF}" != "no" ];then
           diff -u <(echo ${DASHBOARD_BODY} | jq .) <(echo ${UPDATE_DASHBOARD_BODY} | jq .)
         fi
-        
         ${AWS_COMMAND} cloudwatch put-dashboard \
           --dashboard-name "${DASHBOARD_TITLE}" \
           --dashboard-body "$(echo ${UPDATE_DASHBOARD_BODY})"
