@@ -74,6 +74,8 @@ commands:
 jobs:
   integration-test-1:
     executor: integration-test
+    environment:
+      AWS_PAGER: ''
     steps:
       - checkout
       - install-awscli
