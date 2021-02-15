@@ -43,7 +43,7 @@ steps:
         fi
         DEPLOY_FINISHED_DATETIME="<< parameters.deploy_finished_datetime >>"
         if [ -z "${DEPLOY_FINISHED_DATETIME}" ];then
-          DEPLOY_FINISHED_DATETIME=$(date -u '+%Y-%m-%dT%H:%M:%S%z')
+          DEPLOY_FINISHED_DATETIME=$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')
         fi
         DASHBOARD_BODY=$(${AWS_COMMAND} cloudwatch get-dashboard \
           --dashboard-name "${DASHBOARD_TITLE}" | jq -r .DashboardBody)
