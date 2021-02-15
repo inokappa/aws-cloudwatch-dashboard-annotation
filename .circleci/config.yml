@@ -83,7 +83,7 @@ jobs:
           name: Your Deploy Action
           command: |
             echo "Your Deploy Action"
-            echo "export DEPLOY_FINISHED_DATETIME=$(date -u '+%Y-%m-%dT%H:%M:%S%z')" >> $BASH_ENV
+            echo "export DEPLOY_FINISHED_DATETIME=$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')" >> $BASH_ENV
       - aws-cloudwatch-dashboard-annotation/add:
           dashboard_title: "My Dashboard"
           widget_title: "My Metrics2"
