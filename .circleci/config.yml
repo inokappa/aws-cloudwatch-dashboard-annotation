@@ -108,6 +108,28 @@ jobs:
           widget_title: "My Metrics2"
       - check-annotation-on-dashboard
 
+  integration-test-3:
+    executor: integration-test
+    environment:
+      AWS_PAGER: ''
+    steps:
+      - checkout
+      - install-awscli
+      - add-dashboard
+      - run:
+          name: Your Deploy Action
+          command: |
+            echo "Your Deploy Action"
+            echo "export DEPLOY_FINISHED_DATETIME=$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')" >> $BASH_ENV
+            echo "export DASHBOARD_TITLE='My Dashboard'" >> $BASH_ENV
+            echo "export WIDGET_TITLE='My Metrics2'" >> $BASH_ENV
+      - aws-cloudwatch-dashboard-annotation/add:
+          dashboard_title: ${DASHBOARD_TITLE}
+          widget_title: ${WIDGET_TITLE}
+          display_diff: "yes"
+          deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
+      - check-annotation-on-dashboard
+
 workflows:
   test-pack:
     unless: << pipeline.parameters.run-integration-tests >>
