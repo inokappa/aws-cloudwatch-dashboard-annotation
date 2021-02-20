@@ -11,8 +11,7 @@ parameters:
     description: "Specify the widget title."
   widget_titles:
     type: enum
-    enum: 
-      - 'Sample Widget'
+    enum: [ 'Sample Widgeta' ]
     description: "Specify the widget titles."
   label:
     type: string
