@@ -86,7 +86,8 @@ jobs:
             echo "export DEPLOY_FINISHED_DATETIME=$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')" >> $BASH_ENV
       - aws-cloudwatch-dashboard-annotation/add:
           dashboard_title: "My Dashboard"
-          widget_titles: [ "My Metrics1" ]
+          widget_titles:
+            - 'My Metrics1'
           display_diff: "yes"
           deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
       - check-annotation-on-dashboard
@@ -105,7 +106,9 @@ jobs:
             echo "Your Deploy Action"
       - aws-cloudwatch-dashboard-annotation/add:
           dashboard_title: "My Dashboard"
-          widget_titles: [ "My Metrics1", "My Metrics2" ]
+          widget_titles:
+            - 'My Metrics1'
+            - 'My Metrics2'
       - run:
           name: Check the annotations in the dashboard.
           command: |
@@ -131,7 +134,8 @@ jobs:
             echo "export W_TITLE='My Metrics1'" >> $BASH_ENV
       - aws-cloudwatch-dashboard-annotation/add:
           dashboard_title: ${D_TITLE}
-          widget_title: [ "${W_TITLE}" ]
+          widget_titles:
+            - ${W_TITLE}
           display_diff: "yes"
           deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
       - check-annotation-on-dashboard
