@@ -9,6 +9,10 @@ parameters:
     type: string
     default: "Sample Metrics"
     description: "Specify the widget title."
+  widget_titles:
+    type: enum
+    enum: ["Sample Widget"]
+    description: "Specify the widget titles."
   label:
     type: string
     default: "Deploy Finished."
@@ -29,7 +33,7 @@ steps:
       name: Add a deployment completion annotation.
       command: |
         DASHBOARD_TITLE="<< parameters.dashboard_title >>"
-        WIDGET_TITLE="<< parameters.widget_title >>"
+        WIDGET_TITLE="<< parameters.widget_titles >>"
         LABEL="<< parameters.label >>"
         #
         AWS_COMMAND="$(which aws)"
@@ -50,6 +54,7 @@ steps:
           --dashboard-name "${DASHBOARD_TITLE}" | jq -r .DashboardBody)
         UPDATE_DASHBOARD_BODY=$(echo "${DASHBOARD_BODY}" \
           | jq -c "(.widgets[]|select(.properties.title == \"${WIDGET_TITLE}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
+        #
         DISPLAY_DIFF=<< parameters.display_diff >>
         if [ "${DISPLAY_DIFF}" != "no" ];then
           diff -u <(echo ${DASHBOARD_BODY} | jq .) <(echo ${UPDATE_DASHBOARD_BODY} | jq .) || true
