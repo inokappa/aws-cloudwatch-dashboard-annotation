@@ -28,9 +28,10 @@ steps:
   - run:
       name: Add a deployment completion annotation.
       command: |
-        DASHBOARD_TITLE='<< parameters.dashboard_title >>'
-        WIDGET_TITLE='<< parameters.widget_title >>'
-        LABEL='<< parameters.label >>'
+        DASHBOARD_TITLE="<< parameters.dashboard_title >>"
+        WIDGET_TITLE="<< parameters.widget_title >>"
+        LABEL="<< parameters.label >>"
+        #
         AWS_COMMAND="$(which aws)"
         if [ -n "${AWS_ENDPOINT}" ];then
           AWS_COMMAND="aws --endpoint ${AWS_ENDPOINT}"
