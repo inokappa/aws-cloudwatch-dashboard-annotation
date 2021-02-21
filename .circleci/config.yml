@@ -58,7 +58,9 @@ commands:
       widget_title:
         type: string
         default: "My Metrics1"
-        description: "Specify the widget title."
+      count:
+        type: integer
+        default: 1
     steps:
       - run:
           name: Check the annotations in the dashboard.
@@ -71,7 +73,7 @@ commands:
                       --dashboard-name 'My Dashboard' \
                       | jq -r .DashboardBody \
                       | jq '.widgets[]|select(.properties.title == "<< parameters.widget_title >>")'
-            if [ -z $COUNT -o $COUNT = "1" ];then
+            if [ -z $COUNT -o $COUNT = "<< parameters.count >>" ];then
               exit 1
             fi
 
@@ -96,6 +98,7 @@ jobs:
           deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
       - check-annotation-on-dashboard:
           widget_title: "My Metrics1"
+          count: 0
 
   integration-test-2:
     executor: integration-test
@@ -114,8 +117,10 @@ jobs:
           widget_title: "My Metrics1, My Metrics2"
       - check-annotation-on-dashboard:
           widget_title: "My Metrics1"
+          count: 0
       - check-annotation-on-dashboard:
           widget_title: "My Metrics2"
+          count: 1
 
   integration-test-3:
     executor: integration-test
@@ -139,8 +144,10 @@ jobs:
           deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
       - check-annotation-on-dashboard:
           widget_title: "My Metrics1"
+          count: 0
       - check-annotation-on-dashboard:
           widget_title: "My Metrics2"
+          count: 1
 
 workflows:
   test-pack:

@@ -61,13 +61,12 @@ steps:
         OLD_IFS=${IFS}; IFS=","
         for widget_title in ${WIDGET_TITLES}
         do
-          echo "-------------------------------------------------"
-          echo ${widget_title}
-          echo ${loop_count}
-          echo "-------------------------------------------------"
           if [ "${loop_count}" = "0" ];then
             update_dashboard_body=$(echo "${DASHBOARD_BODY}" \
               | jq -c "(.widgets[]|select(.properties.title == \"${widget_title}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
+            if [ "${WIDGET_TITLES[@]}" = "1" ];then
+              break
+            fi
           fi
           update_dashboard_body=$(echo "${update_dashboard_body}" \
             | jq -c "(.widgets[]|select(.properties.title == \"${widget_title}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
