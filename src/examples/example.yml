@@ -15,6 +15,20 @@ usage:
               echo "export DEPLOY_FINISHED_DATETIME=$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')" >> $BASH_ENV
         - aws-cloudwatch-dashboard-annotation/add:
             dashboard_title: "My Dashboard"
-            widget_title: "My Widget"
+            widget_titles: "My Widget"
+            display_diff: "yes"
+            deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
+
+    use-my-orb2:
+      jobs:
+        - checkout
+        - run:
+            name: Your Deploy Action
+            command: |
+              echo "Your Deploy Action"
+              echo "export DEPLOY_FINISHED_DATETIME=$(date -u '+%Y-%m-%dT%H:%M:%S.000Z')" >> $BASH_ENV
+        - aws-cloudwatch-dashboard-annotation/add:
+            dashboard_title: "My Dashboard"
+            widget_titles: "My Widget1,My Widget2"
             display_diff: "yes"
             deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}

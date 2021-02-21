@@ -10,9 +10,11 @@ parameters:
     default: "Sample Metrics"
     description: "Specify the widget title."
   widget_titles:
-    type: enum
-    enum: [ 'Sample Widgeta' ]
-    description: "Specify the widget titles."
+    type: string
+    default: "Sample Widget"
+    description: >
+      Specify the widget titles.
+      If you want to specify multiple widgets, you need to separate them with commas.
   label:
     type: string
     default: "Deploy Finished."
