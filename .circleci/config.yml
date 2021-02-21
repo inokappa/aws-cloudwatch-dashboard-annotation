@@ -113,7 +113,7 @@ jobs:
           dashboard_title: "My Dashboard"
           widget_title: "My Metrics1, My Metrics2"
       - check-annotation-on-dashboard:
-          widget_titles: "My Metrics1"
+          widget_title: "My Metrics1"
       - check-annotation-on-dashboard:
           widget_title: "My Metrics2"
 
