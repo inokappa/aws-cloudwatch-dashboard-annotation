@@ -94,7 +94,7 @@ jobs:
           widget_titles: "My Metrics1"
           display_diff: "yes"
           deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
-      - check-annotation-on-dashboard
+      - check-annotation-on-dashboard:
           widget_titles: "My Metrics1"
 
   integration-test-2:
