@@ -35,7 +35,7 @@ steps:
       name: Add a deployment completion annotation.
       command: |
         DASHBOARD_TITLE="<< parameters.dashboard_title >>"
-        WIDGET_TITLES=$(echo "<< parameters.widget_titles >>" | sed 's/,/\n/g'
+        WIDGET_TITLES=$(echo "<< parameters.widget_titles >>" | sed 's/,/\n/g')
         ## WIDGET_TITLE="<< parameters.widget_titles >>"
         LABEL="<< parameters.label >>"
         #
