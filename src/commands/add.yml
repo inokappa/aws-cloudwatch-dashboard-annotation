@@ -35,8 +35,7 @@ steps:
       name: Add a deployment completion annotation.
       command: |
         DASHBOARD_TITLE="<< parameters.dashboard_title >>"
-        WIDGET_TITLES=$(OLD_IFS=${IFS}; IFS=","; echo "<< parameters.widget_titles >>" | sed 's/,/\n/g'; IFS=${OLD_IFS})
-        ## WIDGET_TITLE="<< parameters.widget_titles >>"
+        WIDGET_TITLES=$(echo "<< parameters.widget_titles >>" | sed 's/,/\n/g' | sed 's/^ *\| *$//')
         LABEL="<< parameters.label >>"
         #
         AWS_COMMAND="$(which aws)"
@@ -58,16 +57,12 @@ steps:
         #
         update_dashboard_body=""
         loop_count=0
-        OLD_IFS=${IFS}; IFS=","
-        for widget_title in ${WIDGET_TITLES[@]}
+        for widget_title in ${WIDGET_TITLES}
         do
-          echo "-------------------"
-          echo ${#WIDGET_TITLES[@]}
-          echo "-------------------"
           if [ ${loop_count} -eq 0 ];then
             update_dashboard_body=$(echo "${DASHBOARD_BODY}" \
               | jq -c "(.widgets[]|select(.properties.title == \"${widget_title}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
-            if [ ${#WIDGET_TITLES[@]} -eq 1 ];then
+            if [ $(echo ${WIDGET_TITLES} | wc -l) = "1" ];then
               break
             fi
           fi
@@ -76,7 +71,6 @@ steps:
           loop_count=$(expr $loop_count + 1)
           echo ${loop_count}
         done
-        IFS=${OLD_IFS}
         #
         DISPLAY_DIFF=<< parameters.display_diff >>
         if [ "${DISPLAY_DIFF}" != "no" ];then
