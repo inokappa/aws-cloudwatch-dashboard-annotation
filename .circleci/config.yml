@@ -54,6 +54,11 @@ commands:
               --dashboard-body '{"widgets":[{"type":"metric","x":0,"y":90,"width":24,"height":6,"properties":{"view":"timeSeries","stacked":false,"metrics":[["AWS/ApplicationELB","RequestCount","LoadBalancer","app/sample1/1234567890"]],"region":"ap-northeast-1","title":"My Metrics1"}},{"type":"metric","x":0,"y":90,"width":24,"height":6,"properties":{"view":"timeSeries","stacked":false,"metrics":[["AWS/ApplicationELB","RequestCount","LoadBalancer","app/sample2/1234567890"]],"region":"ap-northeast-1","title":"My Metrics2","annotations":{"vertical":[{"label":"Deploy Finished.","value":"2021-02-14T09:25:16+0000"}]}}}]}'
 
   check-annotation-on-dashboard:
+    parameters:
+      widget_title:
+        type: string
+        default: "My Metrics1"
+        description: "Specify the widget title."
     steps:
       - run:
           name: Check the annotations in the dashboard.
@@ -61,11 +66,11 @@ commands:
             COUNT=$(aws --endpoint ${AWS_ENDPOINT} cloudwatch get-dashboard \
                       --dashboard-name 'My Dashboard' \
                       | jq -r .DashboardBody \
-                      | jq '.widgets[]|select(.properties.title == "My Metrics2").properties.annotations.vertical|length')
+                      | jq '.widgets[]|select(.properties.title == "<< parameters.widget_title >>").properties.annotations.vertical|length')
             aws --endpoint ${AWS_ENDPOINT} cloudwatch get-dashboard \
                       --dashboard-name 'My Dashboard' \
                       | jq -r .DashboardBody \
-                      | jq '.widgets[]|select(.properties.title == "My Metrics2")'
+                      | jq '.widgets[]|select(.properties.title == "<< parameters.widget_title >>")'
             if [ -z $COUNT -o $COUNT = "1" ];then
               exit 1
             fi
@@ -90,6 +95,7 @@ jobs:
           display_diff: "yes"
           deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
       - check-annotation-on-dashboard
+          widget_titles: "My Metrics1"
 
   integration-test-2:
     executor: integration-test
@@ -106,13 +112,10 @@ jobs:
       - aws-cloudwatch-dashboard-annotation/add:
           dashboard_title: "My Dashboard"
           widget_titles: "My Metrics1, My Metrics2"
-      - run:
-          name: Check the annotations in the dashboard.
-          command: |
-            aws --endpoint ${AWS_ENDPOINT} cloudwatch get-dashboard \
-                      --dashboard-name 'My Dashboard' \
-                      | jq -r .DashboardBody \
-                      | jq '.widgets[]'
+      - check-annotation-on-dashboard:
+          widget_titles: "My Metrics1"
+      - check-annotation-on-dashboard:
+          widget_titles: "My Metrics2"
 
   integration-test-3:
     executor: integration-test
@@ -134,7 +137,10 @@ jobs:
           widget_titles: ${W_TITLE}
           display_diff: "yes"
           deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
-      - check-annotation-on-dashboard
+      - check-annotation-on-dashboard:
+          widget_titles: "My Metrics1"
+      - check-annotation-on-dashboard:
+          widget_titles: "My Metrics2"
 
 workflows:
   test-pack:
