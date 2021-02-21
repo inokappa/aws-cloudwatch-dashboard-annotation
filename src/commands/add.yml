@@ -35,7 +35,7 @@ steps:
       name: Add a deployment completion annotation.
       command: |
         DASHBOARD_TITLE="<< parameters.dashboard_title >>"
-        WIDGET_TITLES="<< parameters.widget_titles >>"
+        WIDGET_TITLES="$(echo << parameters.widget_titles >> | sed 's/,/\n/g'"
         ## WIDGET_TITLE="<< parameters.widget_titles >>"
         LABEL="<< parameters.label >>"
         #
@@ -59,7 +59,7 @@ steps:
         update_dashboard_body=""
         loop_count=0
         OLD_IFS=${IFS}; IFS=","
-        for widget_title in ${WIDGET_TITLES}
+        for widget_title in ${WIDGET_TITLES[@]}
         do
           echo "-------------------"
           echo ${#WIDGET_TITLES[@]}
