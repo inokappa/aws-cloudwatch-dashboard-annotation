@@ -95,7 +95,7 @@ jobs:
           display_diff: "yes"
           deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
       - check-annotation-on-dashboard:
-          widget_titles: "My Metrics1"
+          widget_title: "My Metrics1"
 
   integration-test-2:
     executor: integration-test
@@ -111,11 +111,11 @@ jobs:
             echo "Your Deploy Action"
       - aws-cloudwatch-dashboard-annotation/add:
           dashboard_title: "My Dashboard"
-          widget_titles: "My Metrics1, My Metrics2"
+          widget_title: "My Metrics1, My Metrics2"
       - check-annotation-on-dashboard:
           widget_titles: "My Metrics1"
       - check-annotation-on-dashboard:
-          widget_titles: "My Metrics2"
+          widget_title: "My Metrics2"
 
   integration-test-3:
     executor: integration-test
@@ -138,9 +138,9 @@ jobs:
           display_diff: "yes"
           deploy_finished_datetime: ${DEPLOY_FINISHED_DATETIME}
       - check-annotation-on-dashboard:
-          widget_titles: "My Metrics1"
+          widget_title: "My Metrics1"
       - check-annotation-on-dashboard:
-          widget_titles: "My Metrics2"
+          widget_title: "My Metrics2"
 
 workflows:
   test-pack:
