@@ -73,7 +73,8 @@ steps:
           fi
           update_dashboard_body=$(echo "${UPDATE_DASHBOARD_BODY}" \
             | jq -c "(.widgets[]|select(.properties.title == \"${widget_title}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
-          ((loop_count++))
+          loop_count=((loop_count++))
+          echo ${loop_count}
         done
         IFS=${OLD_IFS}
         #
