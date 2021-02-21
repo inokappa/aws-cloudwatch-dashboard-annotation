@@ -69,7 +69,7 @@ steps:
             update_dashboard_body=$(echo "${DASHBOARD_BODY}" \
               | jq -c "(.widgets[]|select(.properties.title == \"${widget_title}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
           fi
-          update_dashboard_body=$(echo "${UPDATE_DASHBOARD_BODY}" \
+          update_dashboard_body=$(echo "${update_dashboard_body}" \
             | jq -c "(.widgets[]|select(.properties.title == \"${widget_title}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
           loop_count=$(expr $loop_count + 1)
           echo ${loop_count}
