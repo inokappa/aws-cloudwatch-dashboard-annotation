@@ -62,12 +62,12 @@ steps:
         for widget_title in ${WIDGET_TITLES}
         do
           echo "-------------------"
-          echo "${WIDGET_TITLES[@]}"
+          echo ${#WIDGET_TITLES[@]}
           echo "-------------------"
-          if [ "${loop_count}" = "0" ];then
+          if [ ${loop_count} -eq 0 ];then
             update_dashboard_body=$(echo "${DASHBOARD_BODY}" \
               | jq -c "(.widgets[]|select(.properties.title == \"${widget_title}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
-            if [ "${WIDGET_TITLES[@]}" = "1" ];then
+            if [ ${#WIDGET_TITLES[@]} -eq 1 ];then
               break
             fi
           fi
