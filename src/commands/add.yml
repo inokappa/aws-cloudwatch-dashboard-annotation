@@ -35,7 +35,8 @@ steps:
       name: Add a deployment completion annotation.
       command: |
         DASHBOARD_TITLE="<< parameters.dashboard_title >>"
-        WIDGET_TITLE="<< parameters.widget_titles >>"
+        WIDGET_TITLES="<< parameters.widget_titles >>"
+        ## WIDGET_TITLE="<< parameters.widget_titles >>"
         LABEL="<< parameters.label >>"
         #
         AWS_COMMAND="$(which aws)"
@@ -54,13 +55,26 @@ steps:
         fi
         DASHBOARD_BODY=$(${AWS_COMMAND} cloudwatch get-dashboard \
           --dashboard-name "${DASHBOARD_TITLE}" | jq -r .DashboardBody)
-        UPDATE_DASHBOARD_BODY=$(echo "${DASHBOARD_BODY}" \
-          | jq -c "(.widgets[]|select(.properties.title == \"${WIDGET_TITLE}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
+        #
+        update_dashboard_body=""
+        loop_count=0
+        OLD_IFS=${IFS}; IFS=","
+        for widget_title in ${WIDGET_TITLES}
+        do
+          if [ "${loop_count}" = "0" ];then
+            update_dashboard_body=$(echo "${DASHBOARD_BODY}" \
+              | jq -c "(.widgets[]|select(.properties.title == \"${widget_title}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
+          fi
+          update_dashboard_body=$(echo "${UPDATE_DASHBOARD_BODY}" \
+            | jq -c "(.widgets[]|select(.properties.title == \"${widget_title}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
+          ((loop_count++))
+        done
+        IFS=${OLD_IFS}
         #
         DISPLAY_DIFF=<< parameters.display_diff >>
         if [ "${DISPLAY_DIFF}" != "no" ];then
-          diff -u <(echo ${DASHBOARD_BODY} | jq .) <(echo ${UPDATE_DASHBOARD_BODY} | jq .) || true
+          diff -u <(echo ${DASHBOARD_BODY} | jq .) <(echo ${update_dashboard_body} | jq .) || true
         fi
         ${AWS_COMMAND} cloudwatch put-dashboard \
           --dashboard-name "${DASHBOARD_TITLE}" \
-          --dashboard-body "$(echo ${UPDATE_DASHBOARD_BODY})"
+          --dashboard-body "$(echo ${update_dashboard_body})"
