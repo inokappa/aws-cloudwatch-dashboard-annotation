@@ -114,7 +114,7 @@ jobs:
             echo "Your Deploy Action"
       - aws-cloudwatch-dashboard-annotation/add:
           dashboard_title: "My Dashboard"
-          widget_title: "My Metrics1, My Metrics2"
+          widget_titles: "My Metrics1, My Metrics2"
       - check-annotation-on-dashboard:
           widget_title: "My Metrics1"
           count: 0
