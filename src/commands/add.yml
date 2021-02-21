@@ -61,6 +61,9 @@ steps:
         OLD_IFS=${IFS}; IFS=","
         for widget_title in ${WIDGET_TITLES}
         do
+          echo "-------------------"
+          echo "${WIDGET_TITLES[@]}"
+          echo "-------------------"
           if [ "${loop_count}" = "0" ];then
             update_dashboard_body=$(echo "${DASHBOARD_BODY}" \
               | jq -c "(.widgets[]|select(.properties.title == \"${widget_title}\").properties.annotations.vertical) += [{ \"label\": \"${LABEL}\", \"value\": \"${DEPLOY_FINISHED_DATETIME}\" }]")
